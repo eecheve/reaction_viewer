@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="Balabanoff's CER group reaction viewer">
+    <meta property="og:title" content="Molecule Viewer Version 0.1"/>
+    <meta property="og:description" content="Web app to visualize reactive coordinates of various organic reactions"/>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@v0.161.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@v0.161.0/examples/jsm/"
+            }
+        }
+    </script>
+    <title>React View V0.1</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;700&family=Source+Serif+Pro:wght@200;400&display=swap" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <link href="icon" href="public/icons/icon32.ico" type="image/x-icon">
+</head>
+<body>
+    <header> Reaction Viewer V.0.1 </header>
+    <section class="app_info">
+        <h1>How to use</h1>
+        <ul>
+            <li><b>To Rotate Transition State:</b> click and drag any atom</li>
+            <li><b>To Animate Transition State:</b> click and drag the slider below</li>
+        </ul>
+    </section>
+    <section class="viewport">
+        <div id="webgl">
+            <script type="module" src="/main.js"></script>
+        </div>
+        <div class="viewport_image">
+            <img src="/public/templates/right_gs.png" id="ViewportImage">
+        </div>
+     </section>
+     <section class="bottom_ui_panel">
+        <div class="slidercontainer">
+            <input type="range" min="0" max="100" value="50" class="slider" id="AnimationSlider">
+        </div>
+        <div class="empty_beside_slider"></div>
+     </section>
+     <section class="description">
+        <p>Web app written by Emmanuel Echeverri-Jimenez for the Balabanoff Chemistry Education Research Group (2024)</p>
+     </section>
+</body>
+</html>

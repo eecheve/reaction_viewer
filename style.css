@@ -1,0 +1,86 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Source Sans Pro', sans-serif;
+  height: 100%;
+}
+
+header {
+  font-size: 3rem;
+  text-align: center;
+  background-color: black;
+  color: snow;
+}
+
+h1 {
+  font-size: 1.5rem;
+  margin: 0.25rem 0.5rem;
+}
+
+.app_info {
+  background-color: midnightblue;
+}
+.app_info h1{
+  color: yellow;
+}
+.app_info li::marker {
+  color: yellow;
+}
+.app_info li {
+  color: white;
+}
+.app_info b {
+  color: yellow;
+}
+
+.viewport {
+  background-color: lightgrey;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.viewport_image{
+  height: 50vh;
+  width: 50vw;
+  overflow: hidden;
+  display: flex;
+}
+.viewport_image .img{
+  max-width: inherit;
+  max-height: inherit;
+  height: inherit;
+  width: inherit;
+}
+
+.bottom_ui_panel{
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background-color: lightgrey;
+  height: 2rem;
+}
+.slidercontainer {
+  background-color: rgb(2, 36, 33);
+}
+.slidercontainer .slider{
+  width: 75%;
+  position:relative;
+  left: 10%;
+  top: 25%;
+  /* background-color: rgb(2, 36, 33); */
+}
+.slidercontainer .empty_beside_slider{
+  background-color: lightgrey;
+}
+.slider:hover{
+  opacity: 1;
+}
+.slider::-webkit-slider-thumb {
+  cursor: pointer; /* Cursor on hover */
+}
+.slider::-moz-range-thumb {
+  cursor: pointer; /* Cursor on hover */
+}
+
+.description {
+  font-size: 0.5rem;
+}

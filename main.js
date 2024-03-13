@@ -6,6 +6,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 //** Reference vectors and scalars */
 const distanceFromOrigin = 10;
 const cameraOffset = 2;
+const viewportSize = 0.5;
 const origin = new THREE.Vector3(0,0,0);
 const forward = new THREE.Vector3(1,0,0);
 const right = new THREE.Vector3(0,1,0);
@@ -49,6 +50,7 @@ const raycaster = new THREE.Raycaster();
 const cameraDirection = new THREE.Vector3();
 const slider = document.getElementById("AnimationSlider");
 const viewportImage = document.getElementById("ViewportImage");
+const textPlaceHolder = document.getElementById("textPlaceHolder");
 
 let helperCubesArray = [];
 let mixer, animationLength; //animation properties
@@ -62,6 +64,11 @@ function init(){
   scene.background = new THREE.Color( 0x212a20 );
   scene.add( new THREE.AmbientLight( 0xaaaaaa ) );
   
+  //** Camera */
+  camera = new THREE.PerspectiveCamera(fieldOfView, aspectRatio, near, far);
+  camera.position.set(0,0,distanceFromOrigin-cameraOffset);
+  scene.add(camera);
+
   //** Lights */
   const light = new THREE.SpotLight( 0xffffff, 10000 );
   light.position.set( 0, 25, 50 );
@@ -71,17 +78,12 @@ function init(){
   light.shadow.camera.far = 10;
   light.shadow.mapSize.width = 256;
   light.shadow.mapSize.height = 256;
-  scene.add(light);
-
-  //** Camera */
-  camera = new THREE.PerspectiveCamera(fieldOfView, aspectRatio, near, far);
-  camera.position.set(0,0,distanceFromOrigin-cameraOffset);
-  scene.add(camera);
+  camera.add(light); //the light is a child of the camera to be able to follow it.
 
   //** Renderer */
   renderer = new THREE.WebGLRenderer();
   renderer.shadowMap.enabled = true;
-  renderer.setSize(window.innerWidth*0.5, window.innerHeight*0.5);
+  renderer.setSize(window.innerWidth*viewportSize, window.innerHeight*viewportSize);
   document.getElementById('webgl').appendChild(renderer.domElement);
  
   //** Controls */
@@ -91,13 +93,14 @@ function init(){
   document.addEventListener('click', onClick);
 
   //** Reference objects */
-  //addReferenceLines(); //<-- uncomment this line to debug directions
+  addReferenceLines(); //<-- uncomment this line to debug directions
   addReferenceCubes(); //cubes necessary for raycast detection logic
   makeHelperCubesInvisible(); //<-- uncomment this line during production
     
   //** Loading GLB Object */
   //loadGLBObject('water','public/imports/water.glb', new THREE.Vector3(), new THREE.Euler(), 1);
   loadGLBObject('ts01','public/imports/ts01.glb', new THREE.Vector3(), new THREE.Euler(), 1);
+  //loadGLBObject('ts02','public/imports/ts02.glb', new THREE.Vector3(), new THREE.Euler(), 1);
 }
 
 slider.oninput = function() {
@@ -113,6 +116,7 @@ function sliderLogic(sliderValue){
     }
     else{
       viewportImage.src = gsImage;
+      textPlaceHolder.textContent = "ground state";
     }
   }
   else if(sliderValue > 33 && sliderValue <=66){
@@ -121,6 +125,7 @@ function sliderLogic(sliderValue){
     }
     else{
       viewportImage.src = tsImage;
+      textPlaceHolder.textContent = "transition state";
     }
   }
   else{
@@ -129,6 +134,7 @@ function sliderLogic(sliderValue){
     }
     else{
       viewportImage.src = prImage;
+      textPlaceHolder.textContent = "product";
     }
   }
 }

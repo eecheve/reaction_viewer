@@ -22,12 +22,16 @@
 </head>
 <body>
     <header> Reaction Viewer V.0.1 </header>
-    <section class="app_info">
-        <h1>How to use</h1>
+    <section class="introduction">
+        <img src="/public/templates/overall_rxn.png" id="OvarallReaction">
         <ul>
-            <li><b>To Rotate Transition State:</b> click and drag any atom</li>
-            <li><b>To Animate Transition State:</b> click and drag the slider below</li>
-        </ul>
+            <li>To your left you can see a schematic of an elimination reaction.</li>
+            <li>Below you there are two representations of different moments in time.</li>
+            <li>Drag the slider below the two images to move between ground state, transition state, and product.</li>
+        </ul>        
+    </section>
+    <section class="present_view">
+        <p><strong>Currently seeing: </strong><span id="textPlaceHolder">transition state</span></p>
     </section>
     <section class="viewport">
         <div id="webgl">
@@ -41,7 +45,6 @@
         <div class="slidercontainer">
             <input type="range" min="0" max="100" value="50" class="slider" id="AnimationSlider">
         </div>
-        <div class="empty_beside_slider"></div>
      </section>
      <section class="description">
         <p>Web app written by Emmanuel Echeverri-Jimenez for the Balabanoff Chemistry Education Research Group (2024)</p>

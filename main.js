@@ -4,7 +4,8 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 //** Reference vectors and scalars */
-const distanceFromOrigin = 5;
+const distanceFromOrigin = 10;
+const cameraOffset = 2;
 const origin = new THREE.Vector3(0,0,0);
 const forward = new THREE.Vector3(1,0,0);
 const right = new THREE.Vector3(0,1,0);
@@ -74,7 +75,7 @@ function init(){
 
   //** Camera */
   camera = new THREE.PerspectiveCamera(fieldOfView, aspectRatio, near, far);
-  camera.position.set(0,0,distanceFromOrigin-0.5);
+  camera.position.set(0,0,distanceFromOrigin-cameraOffset);
   scene.add(camera);
 
   //** Renderer */
@@ -90,12 +91,13 @@ function init(){
   document.addEventListener('click', onClick);
 
   //** Reference objects */
-  addReferenceLines(); //<-- uncomment this line to debug directions
+  //addReferenceLines(); //<-- uncomment this line to debug directions
   addReferenceCubes(); //cubes necessary for raycast detection logic
   makeHelperCubesInvisible(); //<-- uncomment this line during production
     
   //** Loading GLB Object */
-  loadGLBObject('water','public/imports/water.glb', new THREE.Vector3(), new THREE.Euler(), 1);
+  //loadGLBObject('water','public/imports/water.glb', new THREE.Vector3(), new THREE.Euler(), 1);
+  loadGLBObject('ts01','public/imports/ts01.glb', new THREE.Vector3(), new THREE.Euler(), 1);
 }
 
 slider.oninput = function() {

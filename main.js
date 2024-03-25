@@ -1,7 +1,9 @@
 import * as THREE from 'three';
 import WebGL from 'three/addons/capabilities/WebGL.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { FBXLoader} from 'three/addons/loaders/FBXLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import ircImages from './public/json/eb01.json' assert { type: 'json' }
 
 //** Reference vectors and scalars */
 const distanceFromOrigin = 10;
@@ -45,12 +47,26 @@ var prImage = "/public/templates/right_pr.png";
 
 //** Properties & Constants */
 const fieldOfView = 45, near=1, far=1000;
-const loader = new GLTFLoader();
+const glbLoader = new GLTFLoader();
+const fbxLoader = new FBXLoader();
 const raycaster = new THREE.Raycaster();
 const cameraDirection = new THREE.Vector3();
+
+//** HTML elements */
 const slider = document.getElementById("AnimationSlider");
 const viewportImage = document.getElementById("ViewportImage");
-const textPlaceHolder = document.getElementById("textPlaceHolder");
+const aboutSim = document.getElementById("about_sim");
+const viewportGif = document.getElementById("ViewportGif");
+const currentlySeeingText = document.getElementById("currentlySeeingText");
+const buttonTextEmphasis = document.getElementById("buttonTextEmphasis");
+const button2D = document.getElementById("2d_button");
+const buttonIRC = document.getElementById("irc_button");
+const buttonAbout = document.getElementById("about_button");
+
+//** Button text descriptions */
+const button2DText = "The 2D representation to the right changes both when you rotate the 3D model, and when moving back and forth between the ground state, the transition state, and the product.";
+const buttonIRCText = "The geometry changes for the 3D model as the intrinsic reaction coordinate progresses.";
+const buttonAboutText = "The brief description about the level of theory implemented in the calculation that led to the 3D model seen here.";
 
 let helperCubesArray = [];
 let mixer, animationLength; //animation properties
@@ -89,8 +105,16 @@ function init(){
   //** Controls */
   controls = new OrbitControls(camera, renderer.domElement);
  
+  //** UI */
+  changeButtonColors(button2D, buttonAbout, buttonIRC);
+  aboutSim.style.display = 'none';
+  viewportGif.style.display = 'none';
+    
   //** Events */
   document.addEventListener('click', onClick);
+  button2D.addEventListener('click', view2DClick);
+  buttonAbout.addEventListener('click', aboutClick);
+  buttonIRC.addEventListener('click', ircClick);
 
   //** Reference objects */
   addReferenceLines(); //<-- uncomment this line to debug directions
@@ -98,9 +122,7 @@ function init(){
   makeHelperCubesInvisible(); //<-- uncomment this line during production
     
   //** Loading GLB Object */
-  //loadGLBObject('water','public/imports/water.glb', new THREE.Vector3(), new THREE.Euler(), 1);
-  loadGLBObject('ts01','public/imports/ts01.glb', new THREE.Vector3(), new THREE.Euler(), 1);
-  //loadGLBObject('ts02','public/imports/ts02.glb', new THREE.Vector3(), new THREE.Euler(), 1);
+  loadFBXObject('EB01', 'public/imports/EB01.fbx', new THREE.Vector3(), new THREE.Euler(), 0.01);
 }
 
 slider.oninput = function() {
@@ -116,7 +138,7 @@ function sliderLogic(sliderValue){
     }
     else{
       viewportImage.src = gsImage;
-      textPlaceHolder.textContent = "ground state";
+      currentlySeeingText.textContent = "ground state";
     }
   }
   else if(sliderValue > 33 && sliderValue <=66){
@@ -125,7 +147,7 @@ function sliderLogic(sliderValue){
     }
     else{
       viewportImage.src = tsImage;
-      textPlaceHolder.textContent = "transition state";
+      currentlySeeingText.textContent = "transition state";
     }
   }
   else{
@@ -134,7 +156,7 @@ function sliderLogic(sliderValue){
     }
     else{
       viewportImage.src = prImage;
-      textPlaceHolder.textContent = "product";
+      currentlySeeingText.textContent = "product";
     }
   }
 }
@@ -258,12 +280,48 @@ function makeHelperCubesInvisible(){
 
 function onClick(event){
   console.log('clicked');
-  var temp = scene.getObjectByName("frontCube");
-  console.log(temp.visible);
+  for (const i in ircImages){
+    const obj = ircImages[i];
+    console.log(obj.name);
+  }
+}
+
+function changeButtonColors(bOn, bOff1, bOff2){
+  bOn.style.backgroundColor = '#75e87fff';
+  bOff1.style.background = "#ddddddff";
+  bOff2.style.background = "#ddddddff";
+}
+
+function view2DClick(){
+  changeButtonColors(button2D, buttonAbout, buttonIRC);
+  controls.reset();
+  slider.value = 50;
+  viewportImage.style.display = 'inline';
+  aboutSim.style.display = 'none';
+  viewportGif.style.display = 'none';
+  buttonTextEmphasis.textContent = button2DText;
+}
+function aboutClick(){
+  changeButtonColors(buttonAbout, button2D, buttonIRC);
+  controls.reset();
+  slider.value = 50;
+  viewportImage.style.display = 'none';
+  aboutSim.style.display = 'inline';
+  viewportGif.style.display = 'none';
+  buttonTextEmphasis.textContent = buttonAboutText;
+}
+function ircClick(){
+  changeButtonColors(buttonIRC, button2D, buttonAbout);
+  controls.reset();
+  slider.value = 50;
+  viewportImage.style.display = 'none';
+  aboutSim.style.display = 'none';
+  viewportGif.style.display = 'inline';
+  buttonTextEmphasis.textContent = buttonIRCText;
 }
 
 function loadGLBObject(objectName, objectPath, globalPosition, globalRotation, relativeScale){
-  loader.load(
+  glbLoader.load(
     objectPath,
     function(gltf){
       const model = gltf.scene;
@@ -286,6 +344,32 @@ function loadGLBObject(objectName, objectPath, globalPosition, globalRotation, r
       console.log('There was an error loading the file');
     }
   );
+}
+
+function loadFBXObject(objectName, objectPath, globalPosition, globalRotation, relativeScale){
+  fbxLoader.load(
+    objectPath,
+    (object) => {
+      object.name = objectName;
+      object.position.set(globalPosition.x, globalPosition.y, globalPosition.z);
+      object.rotation.set(globalRotation.x, globalRotation.y, globalRotation.z);
+      object.scale.setScalar(relativeScale);
+      scene.add(object)
+
+      if(object.animations.length > 0){
+        console.log("while loading fbx, animation found");
+        mixer = new THREE.AnimationMixer(object);
+        animationLength = object.animations[0].duration;
+        mixer.clipAction(object.animations[0]).play();
+      }
+    },
+    (xhr) => {
+      console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
+    },
+    (error) => {
+      console.log(error)
+    }
+  )
 }
 
 if ( WebGL.isWebGLAvailable() ) {

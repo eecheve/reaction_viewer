@@ -23,22 +23,34 @@
 <body>
     <header> Reaction Viewer V.0.1 </header>
     <section class="introduction">
-        <img src="/public/templates/overall_rxn.png" id="OvarallReaction">
+        <img src="/public/templates/overall_rxn.png" id="OverallReaction">
         <ul>
             <li>To your left you can see a schematic of an elimination reaction.</li>
-            <li>Below you there are two representations at multiple time points.</li>
+            <li>Below the schematic, a 3D model of the transition state can be found.</li>
             <li>Drag the slider below the two images to move between ground state, transition state, and product.</li>
+            <li><strong style="color:rgb(16, 13, 179)">Notice: </strong><span style="color: rgb(16, 13, 179)" id="buttonTextEmphasis"> The 2D representation to the right changes both when you rotate the 3D model, and when moving back and forth between the ground state, the transition state, and the product.</span></li>
         </ul>        
     </section>
-    <section class="present_view">
-        <p><strong>Currently seeing: </strong><span id="textPlaceHolder">transition state</span></p>
+    <section class="top_ui_panel">
+        <p><strong>Currently seeing: </strong><span id="currentlySeeingText">transition state</span></p>
+        <button type="button" id="2d_button">2D view</button>
+        <button type="button" id="irc_button">Reaction Coordinate</button>
+        <button type="button" id="about_button">About Simulation</button>
     </section>
     <section class="viewport">
         <div id="webgl">
             <script type="module" src="/main.js"></script>
         </div>
-        <div class="viewport_image">
+        <div class="viewport_companion" id="viewport_companion">
+            <script type="text/javascript" src="/js/libgif.js"></script>
             <img src="/public/templates/right_gs.png" id="ViewportImage">
+            <div id="about_sim">
+                <p><strong>Getting the 3D animation to your left</strong><br>
+                The animation to your left is the reactive coordinate of a gas-phase transition state obtained using <a href="https://gaussian.com/gaussian16/">Gaussian 16</a>, following a density functional theory method, where instead of considering each electron individually, only electron density is considered.<br><br>
+                <em>Exchange-correlation energy functional</em>: This calculation used the m062x Minessota functional, suitable for calculations with Bromine and other heavy main-group elements <a href=https://doi.org/10.1007/s00214-007-0310-x>[1]</a> (although it doesn't account for some London dispersion effects <a href=https://doi.org/10.1002/ange.202205735>[2]</a>).<br>
+                <em>Basis Set</em>: Sufficiently large atomic-orbital basis sets are required take advantage of the considerations within energy functionals. Ahlrich's def2-TZVP basis set<a href="https://doi.org/10.1063/1.3484283">[3]</a> has been recommended for anionic systems with heavy elements such as the animation in the left.</p>
+            </div>
+            <img src="/public/imports/eb01.gif" id="ViewportGif">
         </div>
      </section>
      <section class="bottom_ui_panel">

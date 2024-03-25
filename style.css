@@ -24,32 +24,15 @@ h1 {
   display: grid;
   grid-template-columns: 1fr 2fr;
   position: relative;
+  padding-left: 0.5rem;
 }
 .introduction ul {
   position: inherit;
-  top: 25%;
+  top: 15%;
 }
 .introduction p {
   color: rgb(0, 0, 0);
   /* justify-content: center; */
-}
-
-.app_info {
-  background-color: rgb(26, 46, 29);
-  font-size: 0.9rem;
-}
-.app_info h1{
-  color: yellow;
-  font-size: 1.1rem;
-}
-.app_info li::marker {
-  color: yellow;
-}
-.app_info li {
-  color: white;
-}
-.app_info b {
-  color: yellow;
 }
 
 .viewport {
@@ -59,35 +42,58 @@ h1 {
   margin: 0;
   padding: 0;
 }
-.viewport_image{
+.viewport_companion{
   height: 50vh;
-  width: 50vw;
+  width: 48vw;
   overflow: hidden;
   display: flex;
   justify-content: center;
 }
-.viewport_image .img{
+.viewport_companion .img{
   max-width: inherit;
   max-height: inherit;
   height: inherit;
   width: inherit;
 }
+.viewport_companion p{
+  /* padding-left: 0.5rem; */
+  /* padding-right: 0.6rem; */
+  margin: 0.5rem;
+  font-size: 0.95rem;
+}
+.viewport_companion strong{
+  color: rgb(11, 112, 90);
+}
+.viewport_companion em{
+  color: rgb(11, 112, 90);
+}
+.viewport_companion a{
+  color: rgb(11, 112, 90);
+}
+.viewport a:visited{
+  color: rgb(11, 112, 90);
+}
+.viewport a:hover{
+  color: rgb(11, 63, 112);
+}
 
-.present_view {
+.top_ui_panel {
   background-color: rgb(2, 36, 33);
   color: white;
   margin: 0;
   padding: 0;
+  padding-left: 0.5rem;
+  display: grid;
+  grid-template-columns: 3fr 1fr 1fr 1fr;
 }
 
 .bottom_ui_panel{
   width: 100%;
   display: grid;
-  /* grid-template-columns: 1fr 1fr; */
   grid-template-columns: 1fr;
   grid-template-rows: 1fr 1fr;
   background-color: lightgrey;
-  height: 2rem;
+  height: 4rem;
 }
 .slidercontainer {
   background-color: rgb(2, 36, 33);
@@ -114,4 +120,5 @@ h1 {
 
 .description {
   font-size: 0.5rem;
+  text-align: right;
 }

@@ -54,9 +54,9 @@ const cameraDirection = new THREE.Vector3();
 
 //** HTML elements */
 const slider = document.getElementById("AnimationSlider");
-const viewportImage = document.getElementById("ViewportImage");
+const viewport2DImage = document.getElementById("Viewport2DImage");
 const aboutSim = document.getElementById("about_sim");
-const viewportGif = document.getElementById("ViewportGif");
+const viewportIRCImage = document.getElementById("ViewportIRCImage");
 const currentlySeeingText = document.getElementById("currentlySeeingText");
 const buttonTextEmphasis = document.getElementById("buttonTextEmphasis");
 const button2D = document.getElementById("2d_button");
@@ -108,7 +108,7 @@ function init(){
   //** UI */
   changeButtonColors(button2D, buttonAbout, buttonIRC);
   aboutSim.style.display = 'none';
-  viewportGif.style.display = 'none';
+  viewportIRCImage.style.display = 'none';
     
   //** Events */
   document.addEventListener('click', onClick);
@@ -128,34 +128,39 @@ function init(){
 slider.oninput = function() {
   var percentage = this.value/100; //getting value from slider
   mixer.setTime(animationLength*percentage); //updating animation time
-  sliderLogic(this.value);
+  slider2DLogic(this.value);
+  sliderIRCLogic(this.value);
 }
 
-function sliderLogic(sliderValue){
+function sliderIRCLogic(sliderValue){
+  viewportIRCImage.src = ircImages[sliderValue].src;
+}
+
+function slider2DLogic(sliderValue){
   if(sliderValue <= 33){
-    if(viewportImage.src == gsImage){
+    if(viewport2DImage.src == gsImage){
       return;
     }
     else{
-      viewportImage.src = gsImage;
+      viewport2DImage.src = gsImage;
       currentlySeeingText.textContent = "ground state";
     }
   }
   else if(sliderValue > 33 && sliderValue <=66){
-    if(viewportImage.src == tsImage){
+    if(viewport2DImage.src == tsImage){
       return;
     }
     else{
-      viewportImage.src = tsImage;
+      viewport2DImage.src = tsImage;
       currentlySeeingText.textContent = "transition state";
     }
   }
   else{
-    if(viewportImage.src == prImage){
+    if(viewport2DImage.src == prImage){
       return;
     }
     else{
-      viewportImage.src = prImage;
+      viewport2DImage.src = prImage;
       currentlySeeingText.textContent = "product";
     }
   }
@@ -182,32 +187,32 @@ function updateViewerPerspective() {
       case 'frontCube':
         console.log("front cube");
         updateImageSet(frontGS, frontTS, frontPR);
-        sliderLogic(slider.value);
+        slider2DLogic(slider.value);
         break;
       case 'rightCube':
         console.log("right cube");
         updateImageSet(rightGS, rightTS, rightPR);
-        sliderLogic(slider.value);
+        slider2DLogic(slider.value);
         break;
       case 'upCube':
         console.log("up cube");
         updateImageSet(upGS, upTS, upPR);
-        sliderLogic(slider.value);
+        slider2DLogic(slider.value);
         break;
       case 'backCube':
         console.log("back cube");
         updateImageSet(backGS, backTS, backPR);
-        sliderLogic(slider.value);
+        slider2DLogic(slider.value);
         break;
       case 'leftCube':
         console.log("left cube");
         updateImageSet(leftGS, leftTS, leftPR);
-        sliderLogic(slider.value);
+        slider2DLogic(slider.value);
         break;
       case 'downCube':
         console.log("up cube");
         updateImageSet(downGS, downTS, downPR);
-        sliderLogic(slider.value);
+        slider2DLogic(slider.value);
         break;
     }
   }
@@ -280,10 +285,6 @@ function makeHelperCubesInvisible(){
 
 function onClick(event){
   console.log('clicked');
-  for (const i in ircImages){
-    const obj = ircImages[i];
-    console.log(obj.name);
-  }
 }
 
 function changeButtonColors(bOn, bOff1, bOff2){
@@ -296,27 +297,30 @@ function view2DClick(){
   changeButtonColors(button2D, buttonAbout, buttonIRC);
   controls.reset();
   slider.value = 50;
-  viewportImage.style.display = 'inline';
+  viewport2DImage.style.display = 'inline';
   aboutSim.style.display = 'none';
-  viewportGif.style.display = 'none';
+  viewportIRCImage.src = ircImages[50].src;
+  viewportIRCImage.style.display = 'none';
   buttonTextEmphasis.textContent = button2DText;
 }
 function aboutClick(){
   changeButtonColors(buttonAbout, button2D, buttonIRC);
   controls.reset();
   slider.value = 50;
-  viewportImage.style.display = 'none';
+  viewport2DImage.style.display = 'none';
   aboutSim.style.display = 'inline';
-  viewportGif.style.display = 'none';
+  viewportIRCImage.src = ircImages[50].src;
+  viewportIRCImage.style.display = 'none';
   buttonTextEmphasis.textContent = buttonAboutText;
 }
 function ircClick(){
   changeButtonColors(buttonIRC, button2D, buttonAbout);
   controls.reset();
   slider.value = 50;
-  viewportImage.style.display = 'none';
+  viewport2DImage.style.display = 'none';
+  viewportIRCImage.src = ircImages[50].src;
   aboutSim.style.display = 'none';
-  viewportGif.style.display = 'inline';
+  viewportIRCImage.style.display = 'inline';
   buttonTextEmphasis.textContent = buttonIRCText;
 }
 

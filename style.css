@@ -34,6 +34,14 @@ h1 {
   color: rgb(0, 0, 0);
   /* justify-content: center; */
 }
+.introduction strong {
+  background: rgb(39, 39, 39);
+  color: white;
+}
+.buttonTextEmphasis {
+  background: rgb(39, 39, 39);
+  color: white;
+}
 
 .viewport {
   background-color: white;
@@ -91,9 +99,8 @@ h1 {
   width: 100%;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 1fr 1fr;
   background-color: lightgrey;
-  height: 4rem;
+  height: 2rem;
 }
 .slidercontainer {
   background-color: rgb(2, 36, 33);
@@ -104,9 +111,6 @@ h1 {
   left: 10%;
   top: 25%;
   /* background-color: rgb(2, 36, 33); */
-}
-.slidercontainer .empty_beside_slider{
-  background-color: lightgrey;
 }
 .slider:hover{
   opacity: 1;
@@ -119,6 +123,10 @@ h1 {
 }
 
 .description {
+  display: grid;
   font-size: 0.5rem;
   text-align: right;
+  }
+.description p {
+  margin: 0;
 }

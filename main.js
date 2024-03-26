@@ -18,6 +18,13 @@ const up = new THREE.Vector3(0,0,1);
 const forwardMat = new THREE.LineBasicMaterial({color: 0x58f941});
 const rightMat = new THREE.LineBasicMaterial({color: 0xef2770});
 const upMat = new THREE.LineBasicMaterial({color: 0x273cef});
+const outlineMat = new THREE.MeshBasicMaterial({
+  color: 0x273cef,
+  side: THREE.BackSide
+});
+const elementsToHighlight = ["O05","H04","C03","C02","Br15"];
+const highlighterMeshes = [];
+var elementsHighlighted = false;
 
 //** possible image paths */
 const frontGS = "/public/templates/front_gs.png";
@@ -130,6 +137,26 @@ slider.oninput = function() {
   mixer.setTime(animationLength*percentage); //updating animation time
   slider2DLogic(this.value);
   sliderIRCLogic(this.value);
+}
+
+function instantiateHighlighters(atomList){
+  if (elementsHighlighted == false){
+    const radius = 1;  
+    const widthSegments = 30;  
+    const heightSegments = 30;
+    const sphereGeom = new THREE.SphereGeometry( radius, widthSegments, heightSegments );
+
+    for (var i = 0; i < atomList.length; i++) {
+      const currentAtom = scene.getObjectByName(atomList[i]);
+      const highlightName = atomList[i] + "_highlight";
+      const currentMesh = new THREE.Mesh(sphereGeom, outlineMat);
+      currentMesh.name = highlightName
+      currentMesh.scale.setScalar(0.7);
+      currentAtom.add(currentMesh);
+      highlighterMeshes.push(currentMesh);
+    }
+    elementsHighlighted = true;
+  }
 }
 
 function sliderIRCLogic(sliderValue){
@@ -272,19 +299,15 @@ function addReferenceCubes(){
 }
 
 function makeHelperCubesInvisible(){
-  // for (var cube in helperCubesArray){
-  //   cube.visible = false;
-  // } //<---- how to do this in javascript!?
-  helperCubesArray[0].visible = false;
-  helperCubesArray[1].visible = false;
-  helperCubesArray[2].visible = false;
-  helperCubesArray[3].visible = false;
-  helperCubesArray[4].visible = false;
-  helperCubesArray[5].visible = false;
+  for(var i=0; i < helperCubesArray.length; i++){
+    helperCubesArray[i].visible = false;
+  }
 }
 
-function onClick(event){
-  console.log('clicked');
+function toggleHighlighterMeshes(state){
+  for (var i=0; i<highlighterMeshes.length; i++){
+    highlighterMeshes[i].visible = state;
+  }
 }
 
 function changeButtonColors(bOn, bOff1, bOff2){
@@ -302,6 +325,7 @@ function view2DClick(){
   viewportIRCImage.src = ircImages[50].src;
   viewportIRCImage.style.display = 'none';
   buttonTextEmphasis.textContent = button2DText;
+  toggleHighlighterMeshes(false);
 }
 function aboutClick(){
   changeButtonColors(buttonAbout, button2D, buttonIRC);
@@ -312,6 +336,7 @@ function aboutClick(){
   viewportIRCImage.src = ircImages[50].src;
   viewportIRCImage.style.display = 'none';
   buttonTextEmphasis.textContent = buttonAboutText;
+  toggleHighlighterMeshes(false);
 }
 function ircClick(){
   changeButtonColors(buttonIRC, button2D, buttonAbout);
@@ -322,6 +347,8 @@ function ircClick(){
   aboutSim.style.display = 'none';
   viewportIRCImage.style.display = 'inline';
   buttonTextEmphasis.textContent = buttonIRCText;
+  instantiateHighlighters(elementsToHighlight);
+  toggleHighlighterMeshes(true);
 }
 
 function loadGLBObject(objectName, objectPath, globalPosition, globalRotation, relativeScale){
@@ -374,6 +401,10 @@ function loadFBXObject(objectName, objectPath, globalPosition, globalRotation, r
       console.log(error)
     }
   )
+}
+
+function onClick(event){
+  console.log('clicked');
 }
 
 if ( WebGL.isWebGLAvailable() ) {
